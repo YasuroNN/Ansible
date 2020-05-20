@@ -1,0 +1,8 @@
+---
+- name: install neseccary soft
+  hosts: all
+  become: yes
+
+
+  roles:
+   - init_localhost
