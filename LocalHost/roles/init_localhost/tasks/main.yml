@@ -1,4 +1,32 @@
----
-# tasks file for init_localhost
-- name: Install git
-  apt: name=git
+--- 
+#Tasks file for init_localhost
+
+- name: Install Git
+  apt:
+    name: git
+
+- name: Install Google Chrome
+  shell: $COMMANDS
+  register: outpt
+  environment:
+    COMMANDS: "{{ item }}"
+  loop:
+     - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub |sudo apt-key add -
+     - sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+     - sudo apt-get update
+     - sudo apt-get install google-chrome-stable
+ #ignore_errors: true
+  failed_when: outpt.rc != 4 and outpt.rc != 0 and outpt.rc != 2
+  
+- name: Install Visual Stuido Code
+  apt:
+    deb: https://go.microsoft.com/fwlink/?LinkID=760868  
+
+- name: Install dConf-editor
+  apt:
+    name: dconf-editor
+
+- name: Install CopyQ
+  apt:
+    name: copyq
+
