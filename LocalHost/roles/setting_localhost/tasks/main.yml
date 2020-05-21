@@ -1,15 +1,22 @@
 ---
 # tasks file for setting_localhost
 
-- name: Change hotKey for switch language on keyboard 
-  dconf:
-    key: "/org/gnome/desktop/wm/keybindings/switch-input-source"
-    value: "['<Alt>Shift_L', '<Shift>Alt_L']"
+- name: Set hotkey for Flameshot
+  shell: "{{item}}"
+  loop:
+     - gsettings set org.gnome.settings-daemon.plugins.media-keys screenshot '[]'
+     - gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+     - gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name 'flameshot'
+     - gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command '/usr/bin/flameshot gui'
+     - gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding 'Print'
 
-- name: Change hotKey for Run Dialog Budgie 
+- name: Change default hotKey
   dconf:
-    key: "/org/gnome/desktop/wm/keybindings/panel-run-dialog"
-    value: "['<Alt>space']"
+    key: "{{item.key}}"
+    value: "{{item.value}}"
+  loop:
+    - {key: "/org/gnome/desktop/wm/keybindings/switch-input-source", value: "['<Alt>Shift_L', '<Shift>Alt_L']"} 
+    - {key: "/org/gnome/desktop/wm/keybindings/panel-run-dialog", value: "['<Alt>space']"} 
 
 - name: Add Applications to autoRun
   copy: src={{item}} dest=/home/yasuro/.config/autostart
@@ -24,8 +31,6 @@
   loop: 
     - software-properties-drivers.desktop
     - org.gnome.Calendar.desktop
-    - gnome-keyboard-panel.desktop
-    - gkbd-keyboard-display.desktop
     - im-config.desktop
     - software-properties-livepatch.desktop
     - magnus.desktop
@@ -35,3 +40,9 @@
   shell: rm /usr/share/budgie-desktop/applications/* 
   register: outpt
   failed_when: outpt.rc != 1 and outpt.rc != 0  
+
+- name: Copy BackUp layout of Budgie menu 
+  copy: src=budgie-backUp dest=/home/yasuro/Downloads/
+
+- name: Restore layout of Budgie menu from backUp 
+  shell: dconf load /com/solus-project/ < /home/yasuro/Downloads/budgie-backUp

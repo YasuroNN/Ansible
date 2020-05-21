@@ -1,0 +1,10 @@
+---
+
+- name: Install buisness app from repository
+  apt:
+    deb: "{{item}}"
+    update_cache: yes
+  loop:
+    - https://go.skype.com/skypeforlinux-64.deb  
+    
+   
