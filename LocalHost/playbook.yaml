@@ -1,8 +1,10 @@
 ---
 - name: install neseccary soft
   hosts: all
+  become_user: yasuro
   become: yes
 
 
   roles:
-   - init_localhost
+   #- init_localhost
+   - setting_localhost

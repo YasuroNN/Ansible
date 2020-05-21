@@ -30,3 +30,7 @@
   apt:
     name: copyq
 
+- name: Install Flameshot    
+  apt:
+    name: flameshot
+

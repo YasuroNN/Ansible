@@ -1,0 +1,37 @@
+---
+# tasks file for setting_localhost
+
+- name: Change hotKey for switch language on keyboard 
+  dconf:
+    key: "/org/gnome/desktop/wm/keybindings/switch-input-source"
+    value: "['<Alt>Shift_L', '<Shift>Alt_L']"
+
+- name: Change hotKey for Run Dialog Budgie 
+  dconf:
+    key: "/org/gnome/desktop/wm/keybindings/panel-run-dialog"
+    value: "['<Alt>space']"
+
+- name: Add Applications to autoRun
+  copy: src={{item}} dest=/home/yasuro/.config/autostart
+  loop: 
+     - flameshot.desktop
+     - com.github.hluk.copyq.desktop
+      
+
+- name: Delete unnesessary icons applications in menu 
+  shell: rm -r /usr/share/applications/{{item}}
+  register: outpt
+  loop: 
+    - software-properties-drivers.desktop
+    - org.gnome.Calendar.desktop
+    - gnome-keyboard-panel.desktop
+    - gkbd-keyboard-display.desktop
+    - im-config.desktop
+    - software-properties-livepatch.desktop
+    - magnus.desktop
+  failed_when: outpt.rc != 1 and outpt.rc != 0  
+
+- name: Delete unnesessary icons budgie-desktop in menu
+  shell: rm /usr/share/budgie-desktop/applications/* 
+  register: outpt
+  failed_when: outpt.rc != 1 and outpt.rc != 0  
