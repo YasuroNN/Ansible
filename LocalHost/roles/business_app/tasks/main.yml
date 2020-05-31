@@ -6,20 +6,17 @@
     update_cache: yes
   loop:
     - https://go.skype.com/skypeforlinux-64.deb  
-    
 
-- apt_repository: Add nesessarry Repos
-      repo: ppa:remmina-ppa-team/remmina-next
-      state: present
-     
+  # [TODO] IT WAS NOT TESTED------------------------------------------------------------------------------------------------------------
 
-- name: Install Remmina
+  # RUN RDP: xfreerdp /multimon /sound /microphone /clipboard -themes -wallpaper /u:<userName> /v:<name of comp>
+- name: Install buisness apps from repos
   apt:
-    pkg:
-     - remmina
-     - remmina-plugin-rdp 
-     - remmina-plugin-secret
-    update_cache: yes 
+    name: "{{item}}"
+  loop: 
+   - freerdp2-x11  
+  
+   # -----------------------------------------------------------------------------------------------------------------------------  
 
 #- name: Install Prerequisites for Cisco
 #  apt:
