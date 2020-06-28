@@ -51,4 +51,14 @@
 # [TODO] IT WAS NOT TESTED------------------------------------------------------------------------------------------------------------
 - name: Config inputrc
   copy: src=.inputrc dest=~
+
+  
+  #In order to switch vicrtual desktop using page_UP and page_doww. Otherwise idea wil bo allow use hotkey cntrl+alt+right/lefet arrow
+- name: Change default hotkey  for 'swith to workspace'
+  dconf:
+    key: "{{item.key}}"
+    value: "{{item.value}}"
+  loop:
+    - {key: "/org/gnome/desktop/wm/keybindings/switch-input-source", value: "['<Alt>Shift_L', '<Shift>Alt_L']"} 
+    - {key: "/org/gnome/desktop/wm/keybindings/panel-run-dialog", value: "['<Alt>space']"} 
 # ---------------------------------------------------------
